@@ -9,15 +9,11 @@ import 'package:atlanticc/features/auth/view/signup_view.dart';
 import 'package:atlanticc/features/auth/widgets/auth_field.dart';
 import 'package:atlanticc/theme/palette.dart';
 
- 
-
 class LoginView extends ConsumerStatefulWidget {
   static route() => MaterialPageRoute(
         builder: (context) => const LoginView(),
       );
   const LoginView({super.key});
-
- 
 
   @override
   ConsumerState<LoginView> createState() => _LoginViewState();
@@ -29,7 +25,6 @@ class _LoginViewState extends ConsumerState<LoginView> {
   final passwordController = TextEditingController();
   bool _isPasswordVisible = false;
 
- 
   @override
   void dispose() {
     super.dispose();
@@ -38,17 +33,48 @@ class _LoginViewState extends ConsumerState<LoginView> {
   }
 
   void onLogin() {
-    ref.read(authControllerProvider.notifier).login(
-          email: emailController.text,
-          password: passwordController.text,
-          context: context,
-        );
+    final email = emailController.text;
+    final password = passwordController.text;
 
+    if (!isValidEmail(email)) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Invalid Email'),
+            content: Text('Please enter a valid email address.'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+
+      return;
+    }
+
+    ref.read(authControllerProvider.notifier).login(
+      email: email,
+      password: password,
+      context: context,
+    );
+  }
+
+  bool isValidEmail(String email) {
+    final emailRegExp =
+        RegExp(r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$');
+    return emailRegExp.hasMatch(email);
   }
 
   @override
   Widget build(BuildContext context) {
     final isLoading = ref.watch(authControllerProvider);
+
     return Scaffold(
       appBar: appbar,
       body: isLoading
@@ -77,10 +103,12 @@ class _LoginViewState extends ConsumerState<LoginView> {
                           ),
                         ),
                       ),
+
                       AuthField(
                         controller: emailController,
                         hintText: 'Email',
                       ),
+
                       const SizedBox(height: 25),
                       TextField(
                         controller: passwordController,
@@ -101,6 +129,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
                           ),
                         ),
                       ),
+
                       const SizedBox(height: 40),
                       Align(
                         alignment: Alignment.center,
@@ -109,6 +138,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
                           label: 'Done',
                         ),
                       ),
+
                       const SizedBox(height: 40),
                       RichText(
                         text: TextSpan(
@@ -120,15 +150,14 @@ class _LoginViewState extends ConsumerState<LoginView> {
                             TextSpan(
                               text: ' Sign up',
                               style: const TextStyle(
-                               color: Color.fromARGB(255, 140, 166, 206),
+                                color: Color.fromARGB(255, 140, 166, 206),
                                 fontSize: 18,
                               ),
-
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () {
                                   Navigator.push(
                                     context,
-                                    SignUpView.route()
+                                    SignUpView.route(),
                                   );
                                 },
                             ),
@@ -136,10 +165,13 @@ class _LoginViewState extends ConsumerState<LoginView> {
                         ),
                       ),
                     ],
+
                   ),
                 ),
               ),
             ),
+
     );
+    
   }
 }
