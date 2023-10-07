@@ -16,9 +16,7 @@ class TwitterReplyScreen extends ConsumerWidget {
   const TwitterReplyScreen({
     super.key,
     required this.tweet,
-   }
-  );
-
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -83,11 +81,9 @@ class TwitterReplyScreen extends ConsumerWidget {
                             ),
                           );
                         },
-
                         error: (error, stackTrace) => ErrorText(
                           error: error.toString(),
                         ),
-
                         loading: () {
                           return Expanded(
                             child: ListView.builder(
@@ -103,12 +99,11 @@ class TwitterReplyScreen extends ConsumerWidget {
                 },
                 error: (error, stackTrace) => ErrorText(
                   error: error.toString(),
+                ),
+                loading: () => const Loader(),
               ),
-              loading: () => const Loader(),
-            ),
         ],
       ),
-
       bottomNavigationBar: TextField(
         onSubmitted: (value) {
           ref.read(tweetControllerProvider.notifier).shareTweet(
@@ -119,9 +114,8 @@ class TwitterReplyScreen extends ConsumerWidget {
             repliedToUserId: tweet.uid,
           );
         },
-
         decoration: const InputDecoration(
-          hintText: 'Tweet your reply',
+          hintText: 'Atlan your reply',
         ),
       ),
     );
