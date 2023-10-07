@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:Atlantic/features/user_profile/view/user_profile_view.dart';
-import 'package:Atlantic/models/user_model.dart';
-import 'package:Atlantic/theme/pallete.dart';
+import 'package:atlanticc/features/user_profile/view/user_profile_view.dart';
+import 'package:atlanticc/models/user_model.dart';
+import 'package:atlanticc/theme/palette.dart';
 
 class SearchTile extends StatelessWidget {
   final UserModel userModel;

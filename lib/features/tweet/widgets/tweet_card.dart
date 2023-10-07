@@ -14,7 +14,7 @@ import 'package:atlanticc/features/tweet/widgets/hashtag_text.dart';
 import 'package:atlanticc/features/tweet/widgets/tweet_icon_button.dart';
 import 'package:atlanticc/features/user_profile/view/user_profile_view.dart';
 import 'package:atlanticc/models/tweet_model.dart';
-import 'package:atlanticc/theme/pallete.dart';
+import 'package:atlanticc/theme/palette.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class TweetCard extends ConsumerWidget {
