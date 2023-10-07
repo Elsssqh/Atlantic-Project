@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:Atlantic/common/common.dart';
-import 'package:Atlantic/constants/constants.dart';
-import 'package:Atlantic/features/auth/controller/auth_controller.dart';
-import 'package:Atlantic/features/notifications/controller/notification_controller.dart';
-import 'package:Atlantic/features/notifications/widget/notification_tile.dart';
-import 'package:Atlantic/models/notification_model.dart' as model;
+import 'package:atlanticc/common/common.dart';
+import 'package:atlanticc/constants/constants.dart';
+import 'package:atlanticc/features/auth/controller/auth_controller.dart';
+import 'package:atlanticc/features/notifications/controller/notification_controller.dart';
+import 'package:atlanticc/features/notifications/widget/notification_tile.dart';
+import 'package:atlanticc/models/notification_model.dart' as model;
 
 class NotificationView extends ConsumerWidget {
   const NotificationView({super.key});

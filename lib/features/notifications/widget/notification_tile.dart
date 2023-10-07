@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:Atlantic/constants/constants.dart';
-import 'package:Atlantic/core/enums/notification_type_enum.dart';
-import 'package:Atlantic/models/notification_model.dart' as model;
-import 'package:Atlantic/theme/pallete.dart';
+import 'package:atlanticc/constants/constants.dart';
+import 'package:atlanticc/core/enums/notification_type_enum.dart';
+import 'package:atlanticc/models/notification_model.dart' as model;
+import 'package:atlanticc/theme/palette.dart';
 
 class NotificationTile extends StatelessWidget {
   final model.Notification notification;

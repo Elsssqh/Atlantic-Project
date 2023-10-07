@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:Atlantic/apis/notification_api.dart';
-import 'package:Atlantic/core/enums/notification_type_enum.dart';
-import 'package:Atlantic/models/notification_model.dart' as model;
+import 'package:atlanticc/apis/notification_api.dart';
+import 'package:atlanticc/core/enums/notification_type_enum.dart';
+import 'package:atlanticc/models/notification_model.dart' as model;
 
 final notificationControllerProvider =
     StateNotifierProvider<NotificationController, bool>((ref) {

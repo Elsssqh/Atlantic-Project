@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:Atlantic/apis/user_api.dart';
-import 'package:Atlantic/models/user_model.dart';
+import 'package:atlanticc/apis/user_api.dart';
+import 'package:atlanticc/models/user_model.dart';
 
 final exploreControllerProvider = StateNotifierProvider((ref) {
   return ExploreController(

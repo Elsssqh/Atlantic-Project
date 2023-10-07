@@ -4,13 +4,13 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:Atlantic/common/loading_page.dart';
-import 'package:Atlantic/common/rounded_small_button.dart';
-import 'package:Atlantic/constants/assets_constants.dart';
-import 'package:Atlantic/core/utils.dart';
-import 'package:Atlantic/features/auth/controller/auth_controller.dart';
-import 'package:Atlantic/features/tweet/controller/tweet_controller.dart';
-import 'package:Atlantic/theme/pallete.dart';
+import 'package:atlanticc/common/loading_page.dart';
+import 'package:atlanticc/common/rounded_small_button.dart';
+import 'package:atlanticc/constants/assets_constants.dart';
+import 'package:atlanticc/core/utils.dart';
+import 'package:atlanticc/features/auth/controller/auth_controller.dart';
+import 'package:atlanticc/features/tweet/controller/tweet_controller.dart';
+import 'package:atlanticc/theme/palette.dart';
 import 'package:file_picker/file_picker.dart';
 
 class CreateTweetScreen extends ConsumerStatefulWidget {
