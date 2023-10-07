@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:atlanticc/theme/pallete.dart';
+import 'package:atlanticc/theme/palette.dart';
 
 class TweetIconButton extends StatelessWidget {
   final String pathName;
