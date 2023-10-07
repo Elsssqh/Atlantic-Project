@@ -1,145 +1,279 @@
-import 'package:appwrite/models.dart' as model;
+import 'dart:io';
+import 'package:appwrite/appwrite.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:atlanticc/apis/auth_api.dart';
-import 'package:atlanticc/apis/user_api.dart';
+import 'package:atlanticc/apis/storage_api.dart';
+import 'package:atlanticc/apis/tweet_api.dart';
+import 'package:atlanticc/core/enums/notification_type_enum.dart';
+import 'package:atlanticc/core/enums/tweet_type_enum.dart';
 import 'package:atlanticc/core/utils.dart';
-import 'package:atlanticc/features/auth/view/login_view.dart';
-import 'package:atlanticc/features/auth/view/signup_view.dart';
-import 'package:atlanticc/features/home/view/home_view.dart';
+import 'package:atlanticc/features/auth/controller/auth_controller.dart';
+import 'package:atlanticc/features/notifications/controller/notification_controller.dart';
+import 'package:atlanticc/models/tweet_model.dart';
 import 'package:atlanticc/models/user_model.dart';
 
-final authControllerProvider =
-    StateNotifierProvider<AuthController, bool>((ref) {
-
-  return AuthController(
-    authAPI: 
-    ref.watch(authAPIProvider),
-    userAPI: 
-    ref.watch(userAPIProvider),
-    
-  );
-}
+final tweetControllerProvider = StateNotifierProvider<TweetController, bool>(
+  (ref) {
+    return TweetController(
+      ref: ref,
+      tweetAPI: ref.watch(tweetAPIProvider),
+      storageAPI: ref.watch(storageAPIProvider),
+      notificationController:
+          ref.watch(notificationControllerProvider.notifier),
+    );
+  },
 );
 
-final currentUserDetailsProvider = FutureProvider((ref) {
+final getTweetsProvider = FutureProvider((ref) {
+  final tweetController = ref.watch(tweetControllerProvider.notifier);
+  return tweetController.getTweets();
+});
 
-  final currentUserId = ref.watch(currentUserAccountProvider).value!.$id;
-  final userDetails = ref.watch(userDetailsProvider(currentUserId));
-  return userDetails.value;
-}
-);
+final getRepliesToTweetsProvider = FutureProvider.family((ref, Tweet tweet) {
+  final tweetController = ref.watch(tweetControllerProvider.notifier);
+  return tweetController.getRepliesToTweet(tweet);
+});
 
-final userDetailsProvider = FutureProvider.family((ref, String uid) {
+final getLatestTweetProvider = StreamProvider((ref) {
+  final tweetAPI = ref.watch(tweetAPIProvider);
+  return tweetAPI.getLatestTweet();
+});
 
-  final authController = ref.watch(authControllerProvider.notifier);
-  return authController.getUserData(uid);
-}
-);
+final getTweetByIdProvider = FutureProvider.family((ref, String id) async {
+  final tweetController = ref.watch(tweetControllerProvider.notifier);
+  return tweetController.getTweetById(id);
+});
 
-final currentUserAccountProvider = FutureProvider((ref) {
+final getTweetsByHashtagProvider = FutureProvider.family((ref, String hashtag) {
+  final tweetController = ref.watch(tweetControllerProvider.notifier);
+  return tweetController.getTweetsByHashtag(hashtag);
+});
 
-  final authController = ref.watch(authControllerProvider.notifier);
-  return authController.currentUser();
-}
-);
-
-class AuthController extends StateNotifier<bool> {
-
-  final AuthAPI _authAPI;
-  final UserAPI _userAPI;
-  AuthController({
-
-    required AuthAPI authAPI,
-    required UserAPI userAPI,
-  }
-  )  
-  : _authAPI = authAPI,
-        _userAPI = userAPI,
+class TweetController extends StateNotifier<bool> {
+  final TweetAPI _tweetAPI;
+  final StorageAPI _storageAPI;
+  final NotificationController _notificationController;
+  final Ref _ref;
+  TweetController({
+    required Ref ref,
+    required TweetAPI tweetAPI,
+    required StorageAPI storageAPI,
+    required NotificationController notificationController,
+  })  : _ref = ref,
+        _tweetAPI = tweetAPI,
+        _storageAPI = storageAPI,
+        _notificationController = notificationController,
         super(false);
-  // state = isLoading
 
-  Future<model.Account?
-  > currentUser()
-   => _authAPI.currentUserAccount();
-
-  void signUp({
-    required String email,
-    required String password,
-    required BuildContext context,
-
+  Future<List<Tweet>> getTweets() async {
+    final tweetList = await _tweetAPI.getTweets();
+    return tweetList.map((tweet) => Tweet.fromMap(tweet.data)).toList();
   }
-  ) 
-  async {
-    state = true;
-    final res = await _authAPI.signUp(
-      email: email,
-      password: password,
+
+  Future<Tweet> getTweetById(String id) async {
+    final tweet = await _tweetAPI.getTweetById(id);
+    return Tweet.fromMap(tweet.data);
+  }
+
+  void likeTweet(Tweet tweet, UserModel user) async {
+    List<String> likes = tweet.likes;
+
+    if (tweet.likes.contains(user.uid)) {
+      likes.remove(user.uid);
+    } else {
+      likes.add(user.uid);
+    }
+
+    tweet = tweet.copyWith(likes: likes);
+    final res = await _tweetAPI.likeTweet(tweet);
+    res.fold((l) => null, (r) {
+      _notificationController.createNotification(
+        text: '${user.name} liked your tweet!',
+        postId: tweet.id,
+        notificationType: NotificationType.like,
+        uid: tweet.uid,
+      );
+    });
+  }
+
+  void reshareTweet(
+    Tweet tweet,
+    UserModel currentUser,
+    BuildContext context,
+  ) async {
+    tweet = tweet.copyWith(
+      retweetedBy: currentUser.name,
+      likes: [],
+      commentIds: [],
+      reshareCount: tweet.reshareCount + 1,
     );
 
-    state = false;
+    final res = await _tweetAPI.updateReshareCount(tweet);
     res.fold(
       (l) => showSnackBar(context, l.message),
       (r) async {
-        UserModel userModel = UserModel(
-          email: email,
-          name: getNameFromEmail(email),
-          followers: const [],
-          following: const [],
-          profilePic: '',
-          bannerPic: '',
-          uid: r.$id,
-          bio: '',
-          isTwitterBlue: false,
+        tweet = tweet.copyWith(
+          id: ID.unique(),
+          reshareCount: 0,
+          tweetedAt: DateTime.now(),
         );
-
-        final res2 = await _userAPI.saveUserData(userModel);
-        res2.fold((l) => showSnackBar(context, l.message), (r) {
-          showSnackBar(context, 'Accounted created! Please login.');
-          Navigator.push(context, LoginView.route());
-        }
+        final res2 = await _tweetAPI.shareTweet(tweet);
+        res2.fold(
+          (l) => showSnackBar(context, l.message),
+          (r) {
+            _notificationController.createNotification(
+              text: '${currentUser.name} reshared your tweet!',
+              postId: tweet.id,
+              notificationType: NotificationType.retweet,
+              uid: tweet.uid,
+            );
+            showSnackBar(context, 'Retweeted!');
+          },
         );
       },
     );
   }
 
-  void login({
-    required String email,
-    required String password,
+  void shareTweet({
+    required List<File> images,
+    required String text,
     required BuildContext context,
-  }
-  )
-   async {
-    state = true;
-    final res = await _authAPI.login(
-      email: email,
-      password: password,
-    );
-    state = false;
-    res.fold(
-      (l) => showSnackBar(context, l.message),
-      (r) {
-        Navigator.push(context, HomeView.route());
-      },
-    );
-  }
+    required String repliedTo,
+    required String repliedToUserId,
+  }) {
+    if (text.isEmpty) {
+      showSnackBar(context, 'Please enter text');
+      return;
+    }
 
-  Future<UserModel> getUserData(String uid) async {
-    final document = await _userAPI.getUserData(uid);
-    final updatedUser = UserModel.fromMap(document.data);
-    return updatedUser;
-  }
-
-  void logout(BuildContext context) async {
-    final res = await _authAPI.logout();
-    res.fold((l) => null, (r) {
-      Navigator.pushAndRemoveUntil(
-        context,
-        SignUpView.route(),
-        (route) => false,
-
+    if (images.isNotEmpty) {
+      _shareImageTweet(
+        images: images,
+        text: text,
+        context: context,
+        repliedTo: repliedTo,
+        repliedToUserId: repliedToUserId,
+      );
+    } else {
+      _shareTextTweet(
+        text: text,
+        context: context,
+        repliedTo: repliedTo,
+        repliedToUserId: repliedToUserId,
       );
     }
-  );
+  }
+
+  Future<List<Tweet>> getRepliesToTweet(Tweet tweet) async {
+    final documents = await _tweetAPI.getRepliesToTweet(tweet);
+    return documents.map((tweet) => Tweet.fromMap(tweet.data)).toList();
+  }
+
+  Future<List<Tweet>> getTweetsByHashtag(String hashtag) async {
+    final documents = await _tweetAPI.getTweetsByHashtag(hashtag);
+    return documents.map((tweet) => Tweet.fromMap(tweet.data)).toList();
+  }
+
+  void _shareImageTweet({
+    required List<File> images,
+    required String text,
+    required BuildContext context,
+    required String repliedTo,
+    required String repliedToUserId,
+  }) async {
+    state = true;
+    final hashtags = _getHashtagsFromText(text);
+    String link = _getLinkFromText(text);
+    final user = _ref.read(currentUserDetailsProvider).value!;
+    final imageLinks = await _storageAPI.uploadImage(images);
+    Tweet tweet = Tweet(
+      text: text,
+      hashtags: hashtags,
+      link: link,
+      imageLinks: imageLinks,
+      uid: user.uid,
+      tweetType: TweetType.image,
+      tweetedAt: DateTime.now(),
+      likes: const [],
+      commentIds: const [],
+      id: '',
+      reshareCount: 0,
+      retweetedBy: '',
+      repliedTo: repliedTo,
+    );
+    final res = await _tweetAPI.shareTweet(tweet);
+
+    res.fold((l) => showSnackBar(context, l.message), (r) {
+      if (repliedToUserId.isNotEmpty) {
+        _notificationController.createNotification(
+          text: '${user.name} replied to your tweet!',
+          postId: r.$id,
+          notificationType: NotificationType.reply,
+          uid: repliedToUserId,
+        );
+      }
+    });
+    state = false;
+  }
+
+  void _shareTextTweet({
+    required String text,
+    required BuildContext context,
+    required String repliedTo,
+    required String repliedToUserId,
+  }) async {
+    state = true;
+    final hashtags = _getHashtagsFromText(text);
+    String link = _getLinkFromText(text);
+    final user = _ref.read(currentUserDetailsProvider).value!;
+    Tweet tweet = Tweet(
+      text: text,
+      hashtags: hashtags,
+      link: link,
+      imageLinks: const [],
+      uid: user.uid,
+      tweetType: TweetType.text,
+      tweetedAt: DateTime.now(),
+      likes: const [],
+      commentIds: const [],
+      id: '',
+      reshareCount: 0,
+      retweetedBy: '',
+      repliedTo: repliedTo,
+    );
+    final res = await _tweetAPI.shareTweet(tweet);
+    res.fold((l) => showSnackBar(context, l.message), (r) {
+      if (repliedToUserId.isNotEmpty) {
+        _notificationController.createNotification(
+          text: '${user.name} replied to your tweet!',
+          postId: r.$id,
+          notificationType: NotificationType.reply,
+          uid: repliedToUserId,
+        );
+      }
+    });
+    state = false;
+  }
+
+  String _getLinkFromText(String text) {
+    String link = '';
+    List<String> wordsInSentence = text.split(' ');
+    for (String word in wordsInSentence) {
+      if (word.startsWith('https://') || word.startsWith('www.')) {
+        link = word;
+      }
+    }
+    return link;
+  }
+
+  List<String> _getHashtagsFromText(String text) {
+    List<String> hashtags = [];
+    List<String> wordsInSentence = text.split(' ');
+    for (String word in wordsInSentence) {
+      if (word.startsWith('#')) {
+        hashtags.add(word);
+      }
+    }
+    return hashtags;
   }
 }
