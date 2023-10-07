@@ -13,7 +13,8 @@ class SignUpView extends ConsumerStatefulWidget {
   static route() => MaterialPageRoute(
         builder: (context) => const SignUpView(),
       );
-  const SignUpView({super.key});
+
+  const SignUpView({Key? key}) : super(key: key);
 
   @override
   ConsumerState<SignUpView> createState() => _SignUpViewState();
@@ -23,21 +24,42 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
   final appbar = UIConstants.appBar();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-  bool _isPasswordVisible = false; // Variable untuk show/hide password
+  final confirmPasswordController = TextEditingController();
+  bool _isPasswordVisible = false;
 
   @override
   void dispose() {
     super.dispose();
     emailController.dispose();
     passwordController.dispose();
+    confirmPasswordController.dispose();
   }
 
   void onSignUp() {
-    ref.read(authControllerProvider.notifier).signUp(
-          email: emailController.text,
-          password: passwordController.text,
-          context: context,
-        );
+    final email = emailController.text;
+    final password = passwordController.text;
+    final confirmPassword = confirmPasswordController.text;
+
+    if (password != confirmPassword) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Error'),
+            content: Text('Password and Confirm Password do not match.'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    } else {
+    }
   }
 
   @override
@@ -72,14 +94,16 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
                           ),
                         ),
                       ),
+
                       AuthField(
                         controller: emailController,
                         hintText: 'Email',
                       ),
+
                       const SizedBox(height: 25),
                       TextField(
                         controller: passwordController,
-                        obscureText: !_isPasswordVisible, // Show/hide password
+                        obscureText: !_isPasswordVisible,
                         decoration: InputDecoration(
                           hintText: 'Password',
                           suffixIcon: IconButton(
@@ -96,6 +120,28 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
                           ),
                         ),
                       ),
+
+                      const SizedBox(height: 25),
+                      TextField(
+                        controller: confirmPasswordController,
+                        obscureText: !_isPasswordVisible,
+                        decoration: InputDecoration(
+                          hintText: 'Confirm Password',
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              _isPasswordVisible
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _isPasswordVisible = !_isPasswordVisible;
+                              });
+                            },
+                          ),
+                        ),
+                      ),
+
                       const SizedBox(height: 40),
                       Align(
                         alignment: Alignment.center,
@@ -104,6 +150,7 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
                           label: 'Done',
                         ),
                       ),
+
                       const SizedBox(height: 40),
                       RichText(
                         text: TextSpan(
@@ -115,7 +162,7 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
                             TextSpan(
                               text: ' Login',
                               style: const TextStyle(
-                                color: Color.fromARGB(255, 140, 166, 206),
+                                color: Color.fromARGB(255, 207, 220, 240),
                                 fontSize: 18,
                               ),
                               recognizer: TapGestureRecognizer()
@@ -135,5 +182,7 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
               ),
             ),
     );
+
   }
+
 }
