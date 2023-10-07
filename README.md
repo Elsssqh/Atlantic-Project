@@ -1,4 +1,4 @@
-# atlanticc
+# atlantic
 
 A new Flutter project.
 
