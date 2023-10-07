@@ -4,7 +4,7 @@ import 'package:atlanticc/constants/constants.dart';
 import 'package:atlanticc/features/explore/view/explore_view.dart';
 import 'package:atlanticc/features/notifications/views/notification_view.dart';
 import 'package:atlanticc/features/tweet/widgets/tweet_list.dart';
-import 'package:atlanticc/lib/theme/pallete.dart';
+import 'package:atlanticc/theme/palette.dart';
 
 class UIConstants {
   static AppBar appBar() {
