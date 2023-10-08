@@ -28,7 +28,7 @@ class UserProfile extends ConsumerWidget {
             headerSliverBuilder: (context, innerBoxIsScrolled) {
               return [
                 SliverAppBar(
-                  expandedHeight: 150,
+                  expandedHeight: 151,
                   floating: true,
                   snap: true,
                   flexibleSpace: Stack(
