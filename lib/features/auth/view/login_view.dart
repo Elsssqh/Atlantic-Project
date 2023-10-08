@@ -10,15 +10,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class LoginView extends ConsumerStatefulWidget {
   static route() => MaterialPageRoute(
-
         builder: (context) => const LoginView(),
       );
   const LoginView({super.key});
 
   @override
   ConsumerState<LoginView> createState() => _LoginViewState();
-
 }
+
 class _LoginViewState extends ConsumerState<LoginView> {
   final appbar = UIConstants.appBar();
   final emailController = TextEditingController();
@@ -27,8 +26,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
   void _togglevisibility() {
     setState(() {
       _showPassword = !_showPassword;
-    }
-    );
+    });
   }
 
   @override
@@ -37,9 +35,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
     super.dispose();
     emailController.dispose();
     passwordController.dispose();
-
   }
-
 
   void onLogin() {
     ref.read(authControllerProvider.notifier).login(
@@ -67,10 +63,9 @@ class _LoginViewState extends ConsumerState<LoginView> {
                       'Login ',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: 30,
-                        color: Pallete.whiteColor, fontWeight: FontWeight.bold
-
-                      ),
+                          fontSize: 30,
+                          color: Pallete.whiteColor,
+                          fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 60),
                     Column(
@@ -81,9 +76,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
                           titleText: 'Email Address',
                           isPassword: false,
                           backgroundColor: Colors.blue,
-
                         ),
-
                         const SizedBox(height: 15),
                         AuthField(
                           controller: passwordController,
@@ -114,10 +107,9 @@ class _LoginViewState extends ConsumerState<LoginView> {
                         TextSpan(
                           text: 'Sign Up',
                           style: const TextStyle(
-                          color: Pallete.blueColor,
-                           fontSize: 16,
+                            color: Pallete.blueColor,
+                            fontSize: 17,
                           ),
-
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
                               Navigator.push(
@@ -127,8 +119,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
                             },
                         ),
                       ],
-                    )
-                    ),
+                    )),
                   ],
                 ),
               ),
