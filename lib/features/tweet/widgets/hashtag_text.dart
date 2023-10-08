@@ -19,9 +19,10 @@ class HashtagText extends StatelessWidget {
         textspans.add(
           TextSpan(
             text: '$element ',
-            style: const TextStyle(
-            color: Color.fromARGB(255, 118, 149, 222),
-            fontSize: 18,
+            style: 
+            const TextStyle(
+            color: Color.fromARGB(255, 99, 140, 236),
+            fontSize: 19,
             fontWeight: FontWeight.bold,
             ),
             recognizer: TapGestureRecognizer()
@@ -40,9 +41,10 @@ class HashtagText extends StatelessWidget {
         textspans.add(
           TextSpan(
             text: '$element ',
-            style: const TextStyle(
-            color: Color.fromARGB(255, 118, 149, 222),
-            fontSize: 18,
+            style: 
+            const TextStyle(
+            color: Color.fromARGB(255, 99, 140, 236),
+            fontSize: 19,
             ),
           ),
         );
