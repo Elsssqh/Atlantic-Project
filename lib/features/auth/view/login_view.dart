@@ -1,180 +1,138 @@
-import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:atlanticc/common/loading_page.dart';
-import 'package:atlanticc/common/rounded_small_button.dart';
+import 'package:atlanticc/common/common.dart';
 import 'package:atlanticc/constants/constants.dart';
 import 'package:atlanticc/features/auth/controller/auth_controller.dart';
 import 'package:atlanticc/features/auth/view/signup_view.dart';
 import 'package:atlanticc/features/auth/widgets/auth_field.dart';
+import 'package:atlanticc/theme/theme.dart';
+import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class LoginView extends ConsumerStatefulWidget {
   static route() => MaterialPageRoute(
+
         builder: (context) => const LoginView(),
       );
   const LoginView({super.key});
 
   @override
   ConsumerState<LoginView> createState() => _LoginViewState();
-}
 
+}
 class _LoginViewState extends ConsumerState<LoginView> {
   final appbar = UIConstants.appBar();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-  bool _isPasswordVisible = false;
-
-  @override
-  void dispose() {
-    super.dispose();
-    emailController.dispose();
-    passwordController.dispose();
-  }
-
-  void onLogin() {
-    final email = emailController.text;
-    final password = passwordController.text;
-
-    if (!isValidEmail(email)) {
-      showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text('Invalid Email'),
-            content: Text('Please enter a valid email address.'),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text('OK'),
-              ),
-            ],
-          );
-        },
-      );
-
-      return;
+  bool _showPassword = false;
+  void _togglevisibility() {
+    setState(() {
+      _showPassword = !_showPassword;
     }
-
-    ref.read(authControllerProvider.notifier).login(
-      email: email,
-      password: password,
-      context: context,
     );
   }
 
-  bool isValidEmail(String email) {
-    final emailRegExp =
-        RegExp(r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$');
-    return emailRegExp.hasMatch(email);
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+
+  }
+
+
+  void onLogin() {
+    ref.read(authControllerProvider.notifier).login(
+          email: emailController.text,
+          password: passwordController.text,
+          context: context,
+        );
   }
 
   @override
   Widget build(BuildContext context) {
-    final isLoading = ref.watch(authControllerProvider);
-
+    final isLoading = ref.watch(authControllerProvider.notifier).state;
     return Scaffold(
       appBar: appbar,
       body: isLoading
           ? const Loader()
-          : Center(
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30),
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        width: double.infinity,
-                        height: 150,
-                        child: Align(
-                          alignment: Alignment.center,
-                          child: Text(
-                            'Login',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 35,
-                              fontFamily: 'Sen',
-                              fontWeight: FontWeight.w700,
-                              height: 0.01,
-                              letterSpacing: -0.30,
-                            ),
-                          ),
+          : SingleChildScrollView(
+              child: Container(
+                width: double.infinity,
+                height: MediaQuery.of(context).size.height,
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 50),
+                child: Column(
+                  children: [
+                    const Text(
+                      'Login ',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 30,
+                        color: Pallete.whiteColor, fontWeight: FontWeight.bold
+
+                      ),
+                    ),
+                    const SizedBox(height: 60),
+                    Column(
+                      children: [
+                        AuthField(
+                          controller: emailController,
+                          hintText: 'Your Email',
+                          titleText: 'Email Address',
+                          isPassword: false,
+                          backgroundColor: Colors.blue,
+
                         ),
-                      ),
 
-                      const SizedBox(height: 25),
-                      AuthField(
-                        controller: emailController,
-                        hintText: 'Email',
-                      ),
-
-                      const SizedBox(height: 25),
-
-                    
-                      TextField(
-                        controller: passwordController,
-                        obscureText: !_isPasswordVisible,
-                        decoration: InputDecoration(
-                          hintText: 'Password',
-                          suffixIcon: IconButton(
-                            icon: Icon(
-                              _isPasswordVisible
-                                  ? Icons.visibility
-                                  : Icons.visibility_off,
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                _isPasswordVisible = !_isPasswordVisible;
-                              });
-                            },
-                          ),     
+                        const SizedBox(height: 15),
+                        AuthField(
+                          controller: passwordController,
+                          hintText: 'Your Password',
+                          titleText: 'Password',
+                          isPassword: true,
+                          backgroundColor: Colors.blue,
                         ),
+                      ],
+                    ),
+                    const SizedBox(height: 80),
+                    Align(
+                      alignment: Alignment.center,
+                      child: RoundedSmallButton(
+                        onTap: onLogin,
+                        label: 'Login',
                       ),
-                      
-
-                      const SizedBox(height: 40),
-                      Align(
-                        alignment: Alignment.center,
-                        child: RoundedSmallButton(
-                          onTap: onLogin,
-                          label: 'Done',
-                        ),
-                      ),
-
-                      const SizedBox(height: 40),
-                      RichText(
+                    ),
+                    const SizedBox(height: 30),
+                    RichText(
                         text: TextSpan(
-                          text: "You Don't have an account?",
-                          style: const TextStyle(
-                            fontSize: 18,
-                          ),
-                          children: [
-                            TextSpan(
-                              text: ' Sign up',
-                              style: const TextStyle(
-                                color: Color.fromARGB(255, 140, 166, 206),
-                                fontSize: 18,
-                              ),
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () {
-                                  Navigator.push(
-                                    context,
-                                    SignUpView.route(),
-                                  );
-                                },
-                            ),
-                          ],
-                        ),
+                      text: "Don't have an account? ",
+                      style: const TextStyle(
+                        color: Pallete.whiteColor,
+                        fontSize: 16,
                       ),
-                    ],
+                      children: [
+                        TextSpan(
+                          text: 'Sign Up',
+                          style: const TextStyle(
+                          color: Pallete.blueColor,
+                           fontSize: 16,
+                          ),
 
-                  ),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              Navigator.push(
+                                context,
+                                SignUpView.route(),
+                              );
+                            },
+                        ),
+                      ],
+                    )
+                    ),
+                  ],
                 ),
               ),
             ),
-
     );
-    
   }
 }
