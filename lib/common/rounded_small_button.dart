@@ -10,13 +10,15 @@ class RoundedSmallButton extends StatelessWidget {
     super.key,
     required this.onTap,
     required this.label,
-    this.backgroundColor = const Color.fromARGB(255, 101, 125, 210),
+    this.backgroundColor = const Color.fromARGB(255, 100, 125, 210),
     this.textColor = Pallete.whiteColor,
-  });
+  }
+  );
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
+      
       onTap: onTap,
       child: Chip(
         label: Text(
