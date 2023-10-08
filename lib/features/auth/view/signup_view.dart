@@ -7,35 +7,37 @@ import 'package:atlanticc/constants/constants.dart';
 import 'package:atlanticc/features/auth/controller/auth_controller.dart';
 import 'package:atlanticc/features/auth/view/login_view.dart';
 import 'package:atlanticc/features/auth/widgets/auth_field.dart';
+import 'package:atlanticc/theme/palette.dart';
+
 
 class SignUpView extends ConsumerStatefulWidget {
   static route() => MaterialPageRoute(
         builder: (context) => const SignUpView(),
       );
 
-  const SignUpView({Key? key}) : super(key: key);
+  const SignUpView({super.key});
 
   @override
   ConsumerState<SignUpView> createState() => _SignUpViewState();
 }
+
 
 class _SignUpViewState extends ConsumerState<SignUpView> {
   final appbar = UIConstants.appBar();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
-  bool _isPasswordVisible = false;
 
   @override
   void dispose() {
+
     super.dispose();
     emailController.dispose();
     passwordController.dispose();
-    confirmPasswordController.dispose();
   }
 
-  void onSignUp() {
 
+   void onSignUp() {
     final email = emailController.text;
     final password = passwordController.text;
     final confirmPassword = confirmPasswordController.text;
@@ -46,20 +48,20 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text('Error', 
+            title: Text('Error',
             style:  const TextStyle(
             color: Color.fromARGB(255, 91, 124, 202),
             fontSize: 20,
             ),
           ),
-            content: Text('Password and Confirm Password do not match.', 
+            content: Text('Password and Confirm Password do not match.',
             style:  const TextStyle(
             color: Color.fromARGB(255, 91, 124, 202),
-            fontSize: 20, 
+            fontSize: 20,
             ),
           ),
-            actions: [
 
+            actions: [
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop();
@@ -70,135 +72,107 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
           );
         },
       );
+
     } else {
     }
   }
 
+
   @override
   Widget build(BuildContext context) {
-
     final isLoading = ref.watch(authControllerProvider);
 
-    return Scaffold(
 
+    return Scaffold(
       appBar: appbar,
       body: isLoading
           ? const Loader()
-          : Center(
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        width: double.infinity,
-                        height: 150,
-                        child: Align(
-                          alignment: Alignment.center,
-                          child: Text(
-                            'Sign Up',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 35,
-                              fontFamily: 'Sen',
-                              fontWeight: FontWeight.w700,
-                              height: 0.01,
-                              letterSpacing: -0.30,
-                            ),
-                          ),
-                        ),
+          : SingleChildScrollView(
+              child: Container(
+                width: double.infinity,
+                height: MediaQuery.of(context).size.height,
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 50),
+                child: Column(
+                  children: [
+                    const Text(
+                      'Sign Up',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 30,
+                        color: Colors.white,fontWeight: FontWeight.bold,
                       ),
+                    ),
 
-                      AuthField(
-                        
-                        controller: emailController,
-                        hintText: 'Email',
+                    const SizedBox(height: 45),
+                    AuthField(
+                      controller: emailController,
+                      hintText: 'Your Email',
+                      titleText: 'Email Address',
+                      isPassword: false,
+                      backgroundColor: Colors.blue,
+                    ),
+
+                    const SizedBox(height: 10),
+                    AuthField(
+                      controller: passwordController,
+                      hintText: 'Your Password',
+                      titleText: 'Password',
+                      isPassword: true,
+                      backgroundColor: Colors.blue,
+                    ),
+
+                    const SizedBox(height: 10),
+                    AuthField(
+                      controller: confirmPasswordController,
+                      hintText: 'Confirm Your Password',
+                      titleText: 'Confirm Password',
+                      isPassword: true,
+                      backgroundColor: Colors.blue,
+                    ),
+
+                    const SizedBox(height: 40),
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: RoundedSmallButton(
+                        onTap: onSignUp,
+                        label: 'Sign Up',
                       ),
+                    ),
 
-                      const SizedBox(height: 25),
-                      AuthField(
-                        controller: passwordController,
-                          hintText: 'Password',
-                          isPassword: true,
-                          obsecureText: !_isPasswordVisible,
-                          suffixIcon: IconButton(
-                            icon: Icon(
-                              _isPasswordVisible
-                                  ? Icons.visibility
-                                  : Icons.visibility_off,
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                _isPasswordVisible = !_isPasswordVisible;
-                              });
-                            },
-                          ),
-                        ),
-                      
-
-                      const SizedBox(height: 25),
-                      AuthField(
-                        controller: confirmPasswordController,
-                        obscureText: !_isPasswordVisible,
-                          isPassword: true,
-                          obsecureText: !_isPasswordVisible,
-                          hintText: 'Confirm Password',
-                          suffixIcon: IconButton(
-                            icon: Icon(
-                              _isPasswordVisible
-                                  ? Icons.visibility
-                                  : Icons.visibility_off,
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                _isPasswordVisible = !_isPasswordVisible;
-                              });
-                            },
-                          ),
-                        ),
-                      
-
-                      const SizedBox(height: 40),
-                      Align(
-                        alignment: Alignment.center,
-                        child: RoundedSmallButton(
-                          onTap: onSignUp,
-                          label: 'Done',
-                        ),
-                      ),
-
-                      const SizedBox(height: 40),
-                      RichText(
+                    const SizedBox(height: 30),
+                    RichText(
                         text: TextSpan(
-                          text: "Already have an account?",
-                          style: const TextStyle(
-                            fontSize: 18,
-                          ),
-                          children: [
-                            TextSpan(
-                              text: ' Login',
-                              style: const TextStyle(
-                                color: Color.fromARGB(255, 207, 220, 240),
-                                fontSize: 18,
-                              ),
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () {
-                                  Navigator.push(
-                                    context,
-                                    LoginView.route(),
-                                  );
-                                },
-                            ),
-                          ],
-                        ),
+                      text: "Already have an account? ",
+                      style: const TextStyle(
+                        color: Pallete.whiteColor,
+                        fontSize: 16,
                       ),
-                    ],
-                  ),
+
+                      children: [
+                        TextSpan(
+                          text: 'Login',
+                          style: const TextStyle(
+                            color: Colors.blue,
+                            fontSize: 16,
+                          ),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              Navigator.push(
+                                context,
+                                LoginView.route(),
+                              );
+                            },
+
+                        ),
+                      ],
+                    )),
+
+                  ],
                 ),
               ),
             ),
+
     );
 
   }
-
 }
