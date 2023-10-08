@@ -50,7 +50,7 @@ class _HomeViewState extends State<HomeView> {
       bottomNavigationBar: CupertinoTabBar(
         currentIndex: _page,
         onTap: onPageChange,
-        backgroundColor: Color.fromARGB(255, 68, 74, 128),
+        backgroundColor: Color.fromARGB(255, 68, 74, 129),
         items: [
           BottomNavigationBarItem(
             icon: SvgPicture.asset(
