@@ -8,14 +8,16 @@ import 'package:atlanticc/features/auth/controller/auth_controller.dart';
 import 'package:atlanticc/features/auth/view/login_view.dart';
 import 'package:atlanticc/features/auth/widgets/auth_field.dart';
 import 'package:atlanticc/theme/palette.dart';
-
+ 
 
 class SignUpView extends ConsumerStatefulWidget {
   static route() => MaterialPageRoute(
         builder: (context) => const SignUpView(),
       );
 
+
   const SignUpView({super.key});
+ 
 
   @override
   ConsumerState<SignUpView> createState() => _SignUpViewState();
@@ -27,6 +29,7 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
+ 
 
   @override
   void dispose() {
@@ -34,54 +37,47 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
     super.dispose();
     emailController.dispose();
     passwordController.dispose();
+
+  }
+ 
+
+void onSignUp() {
+  final email = emailController.text;
+  final password = passwordController.text;
+  final confirmPassword = confirmPasswordController.text;
+
+
+  if (passwordController.text != confirmPasswordController.text) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          'Password and Confirm Password do not match.',
+          style: TextStyle(
+            fontSize: 16,
+          ),
+        ),
+
+        backgroundColor: Color.fromARGB(255, 91, 124, 202),
+        duration: Duration(seconds: 2), // Adjust the duration as needed
+      ),
+    );
+
+  } else {
+    final res = ref.read(authControllerProvider.notifier).signUp(
+
+      email: emailController.text,
+      password: passwordController.text,
+      context: context,
+    );
+
   }
 
-
-   void onSignUp() {
-    final email = emailController.text;
-    final password = passwordController.text;
-    final confirmPassword = confirmPasswordController.text;
-
-    if (password != confirmPassword) {
-
-      showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text('Error',
-            style:  const TextStyle(
-            color: Color.fromARGB(255, 91, 124, 202),
-            fontSize: 20,
-            ),
-          ),
-            content: Text('Password and Confirm Password do not match.',
-            style:  const TextStyle(
-            color: Color.fromARGB(255, 91, 124, 202),
-            fontSize: 20,
-            ),
-          ),
-
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text('OK'),
-              ),
-            ],
-          );
-        },
-      );
-
-    } else {
-    }
-  }
+}
 
 
   @override
   Widget build(BuildContext context) {
     final isLoading = ref.watch(authControllerProvider);
-
 
     return Scaffold(
       appBar: appbar,
@@ -104,6 +100,7 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
                     ),
 
                     const SizedBox(height: 45),
+
                     AuthField(
                       controller: emailController,
                       hintText: 'Your Email',
@@ -113,6 +110,7 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
                     ),
 
                     const SizedBox(height: 10),
+
                     AuthField(
                       controller: passwordController,
                       hintText: 'Your Password',
@@ -120,8 +118,9 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
                       isPassword: true,
                       backgroundColor: Colors.blue,
                     ),
-
+ 
                     const SizedBox(height: 10),
+
                     AuthField(
                       controller: confirmPasswordController,
                       hintText: 'Confirm Your Password',
@@ -132,7 +131,7 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
 
                     const SizedBox(height: 40),
                     Align(
-                      alignment: Alignment.center,
+                      alignment: Alignment.topRight,
                       child: RoundedSmallButton(
                         onTap: onSignUp,
                         label: 'Sign Up',
@@ -140,6 +139,7 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
                     ),
 
                     const SizedBox(height: 30),
+
                     RichText(
                         text: TextSpan(
                       text: "Already have an account? ",
@@ -155,24 +155,32 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
                             color: Colors.blue,
                             fontSize: 16,
                           ),
+
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
                               Navigator.push(
                                 context,
                                 LoginView.route(),
                               );
+
                             },
 
                         ),
+
                       ],
+
                     )),
 
                   ],
+
                 ),
+
               ),
+
             ),
 
     );
 
   }
+
 }
