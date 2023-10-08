@@ -125,10 +125,11 @@ class _LoginViewState extends ConsumerState<LoginView> {
                                 _isPasswordVisible = !_isPasswordVisible;
                               });
                             },
-                          ),
+                          ),     
                         ),
                       ),
-
+                      const SizedBox(height: 25),
+                                            
                       const SizedBox(height: 40),
                       Align(
                         alignment: Alignment.center,
