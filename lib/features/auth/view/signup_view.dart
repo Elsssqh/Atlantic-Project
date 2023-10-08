@@ -137,7 +137,7 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
                       
 
                       const SizedBox(height: 25),
-                      TextField(
+                      AuthField(
                         controller: confirmPasswordController,
                         obscureText: !_isPasswordVisible,
                           isPassword: true,
