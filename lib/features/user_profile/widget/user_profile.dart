@@ -36,7 +36,19 @@ class UserProfile extends ConsumerWidget {
                       Positioned.fill(
                         child: user.bannerPic.isEmpty
                             ? Container(
-                                color: Color.fromARGB(255, 151, 165, 248),
+                                height: 200,
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      Color.fromARGB(255, 1, 21, 149),
+                                      Color.fromARGB(255, 43, 106, 222)
+                                    ],
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                    stops: [0.0, 1.0],
+                                    tileMode: TileMode.clamp,
+                                  ),
+                                ),
                               )
                             : Image.network(
                                 user.bannerPic,
@@ -84,7 +96,7 @@ class UserProfile extends ConsumerWidget {
                                     ? 'Unfollow'
                                     : 'Follow',
                             style: const TextStyle(
-                              color: Color.fromARGB(255, 57, 49, 108),
+                              color: Color.fromARGB(255, 186, 175, 255),
                             ),
                           ),
                         ),
@@ -119,7 +131,7 @@ class UserProfile extends ConsumerWidget {
                           '@${user.name}',
                           style: const TextStyle(
                             fontSize: 17,
-                            color: Color.fromARGB(255, 25, 13, 32),
+                            color: Color.fromARGB(255, 204, 186, 214),
                           ),
                         ),
                         Text(
