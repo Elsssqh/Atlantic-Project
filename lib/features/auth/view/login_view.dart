@@ -103,12 +103,15 @@ class _LoginViewState extends ConsumerState<LoginView> {
                         ),
                       ),
 
+                      const SizedBox(height: 25),
                       AuthField(
                         controller: emailController,
                         hintText: 'Email',
                       ),
 
                       const SizedBox(height: 25),
+
+                    
                       TextField(
                         controller: passwordController,
                         obscureText: !_isPasswordVisible,
@@ -128,8 +131,8 @@ class _LoginViewState extends ConsumerState<LoginView> {
                           ),     
                         ),
                       ),
-                      const SizedBox(height: 25),
-                                            
+                      
+
                       const SizedBox(height: 40),
                       Align(
                         alignment: Alignment.center,

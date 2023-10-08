@@ -116,11 +116,11 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
                       ),
 
                       const SizedBox(height: 25),
-                      TextField(
+                      AuthField(
                         controller: passwordController,
-                        obscureText: !_isPasswordVisible,
-                        decoration: InputDecoration(
                           hintText: 'Password',
+                          isPassword: true,
+                          obsecureText: _isPasswordVisible,
                           suffixIcon: IconButton(
                             icon: Icon(
                               _isPasswordVisible
@@ -134,13 +134,14 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
                             },
                           ),
                         ),
-                      ),
+                      
 
                       const SizedBox(height: 25),
                       TextField(
                         controller: confirmPasswordController,
                         obscureText: !_isPasswordVisible,
-                        decoration: InputDecoration(
+                          isPassword: true,
+                          obsecureText: _isPasswordVisible,
                           hintText: 'Confirm Password',
                           suffixIcon: IconButton(
                             icon: Icon(
@@ -155,7 +156,7 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
                             },
                           ),
                         ),
-                      ),
+                      
 
                       const SizedBox(height: 40),
                       Align(
