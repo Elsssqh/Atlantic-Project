@@ -111,13 +111,13 @@ class _EditProfileViewState extends ConsumerState<EditProfileView> {
                               : user.bannerPic.isEmpty
                                   ? Container(
                                       height:
-                                          200, // Sesuaikan tinggi sesuai kebutuhan Anda
+                                          200, 
                                       decoration: BoxDecoration(
                                         gradient: LinearGradient(
                                           colors: [
-                                            Color.fromARGB(255, 1, 21, 149),
+                                            Color.fromARGB(255, 1, 21, 148),
                                             Color.fromARGB(255, 43, 106, 222)
-                                          ], // Daftar warna gradient
+                                          ], 
                                           begin: Alignment
                                               .topLeft, // Posisi awal gradient
                                           end: Alignment
@@ -125,9 +125,9 @@ class _EditProfileViewState extends ConsumerState<EditProfileView> {
                                           stops: [
                                             0.0,
                                             1.0
-                                          ], // Posisi berhenti untuk masing-masing warna
+                                          ],
                                           tileMode: TileMode
-                                              .clamp, // Modus tile, jika diperlukan
+                                              .clamp, 
                                         ),
                                       ),
                                     )
