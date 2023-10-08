@@ -120,7 +120,7 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
                         controller: passwordController,
                           hintText: 'Password',
                           isPassword: true,
-                          obsecureText: _isPasswordVisible,
+                          obsecureText: !_isPasswordVisible,
                           suffixIcon: IconButton(
                             icon: Icon(
                               _isPasswordVisible
@@ -141,7 +141,7 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
                         controller: confirmPasswordController,
                         obscureText: !_isPasswordVisible,
                           isPassword: true,
-                          obsecureText: _isPasswordVisible,
+                          obsecureText: !_isPasswordVisible,
                           hintText: 'Confirm Password',
                           suffixIcon: IconButton(
                             icon: Icon(
