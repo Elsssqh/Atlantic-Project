@@ -1,8 +1,6 @@
 class AppwriteConstants {
   static const String projectId = '650bc719b5f5608138de';
-
   static const String databaseId = '650be23e77c79f902481';
-  
   static const String endPoint = 'https://cloud.appwrite.io/v1';
 
 
