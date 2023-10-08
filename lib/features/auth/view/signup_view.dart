@@ -35,18 +35,31 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
   }
 
   void onSignUp() {
+
     final email = emailController.text;
     final password = passwordController.text;
     final confirmPassword = confirmPasswordController.text;
 
     if (password != confirmPassword) {
+
       showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text('Error'),
-            content: Text('Password and Confirm Password do not match.'),
+            title: Text('Error', 
+            style:  const TextStyle(
+            color: Color.fromARGB(255, 91, 124, 202),
+            fontSize: 20,
+            ),
+          ),
+            content: Text('Password and Confirm Password do not match.', 
+            style:  const TextStyle(
+            color: Color.fromARGB(255, 91, 124, 202),
+            fontSize: 20, 
+            ),
+          ),
             actions: [
+
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop();
@@ -63,9 +76,11 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
 
   @override
   Widget build(BuildContext context) {
+
     final isLoading = ref.watch(authControllerProvider);
 
     return Scaffold(
+
       appBar: appbar,
       body: isLoading
           ? const Loader()
@@ -95,6 +110,7 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
                       ),
 
                       AuthField(
+                        
                         controller: emailController,
                         hintText: 'Email',
                       ),
