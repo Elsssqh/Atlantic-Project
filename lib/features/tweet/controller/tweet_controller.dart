@@ -88,7 +88,7 @@ class TweetController extends StateNotifier<bool> {
     final res = await _tweetAPI.likeTweet(tweet);
     res.fold((l) => null, (r) {
       _notificationController.createNotification(
-        text: '${user.name} liked your tweet!',
+        text: '${user.name} liked your Blues!',
         postId: tweet.id,
         notificationType: NotificationType.like,
         uid: tweet.uid,
@@ -122,12 +122,12 @@ class TweetController extends StateNotifier<bool> {
           (l) => showSnackBar(context, l.message),
           (r) {
             _notificationController.createNotification(
-              text: '${currentUser.name} reshared your tweet!',
+              text: '${currentUser.name} reshared your Blues!',
               postId: tweet.id,
               notificationType: NotificationType.retweet,
               uid: tweet.uid,
             );
-            showSnackBar(context, 'Retweeted!');
+            showSnackBar(context, 'Reuploading Blues');
           },
         );
       },
