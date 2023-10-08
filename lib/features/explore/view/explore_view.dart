@@ -4,7 +4,6 @@ import 'package:atlanticc/common/error_page.dart';
 import 'package:atlanticc/common/loading_page.dart';
 import 'package:atlanticc/features/explore/controller/explore_controller.dart';
 import 'package:atlanticc/features/explore/widgets/search_tile.dart';
-import 'package:atlanticc/theme/palette.dart';
 
 class ExploreView extends ConsumerStatefulWidget {
   const ExploreView({super.key});

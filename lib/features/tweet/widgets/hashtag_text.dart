@@ -1,7 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:atlanticc/features/tweet/views/hashtag_view.dart';
-import 'package:atlanticc/theme/palette.dart';
 
 class HashtagText extends StatelessWidget {
   final String text;

@@ -4,7 +4,6 @@ import 'package:atlanticc/common/loading_page.dart';
 import 'package:atlanticc/features/auth/controller/auth_controller.dart';
 import 'package:atlanticc/features/user_profile/contoller/user_profile_controller.dart';
 import 'package:atlanticc/features/user_profile/view/user_profile_view.dart';
-import 'package:atlanticc/theme/palette.dart';
 
  
 

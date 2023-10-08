@@ -5,7 +5,6 @@ import 'package:atlanticc/common/loading_page.dart';
 import 'package:atlanticc/core/utils.dart';
 import 'package:atlanticc/features/auth/controller/auth_controller.dart';
 import 'package:atlanticc/features/user_profile/contoller/user_profile_controller.dart';
-import 'package:atlanticc/theme/theme.dart';
 
 class EditProfileView extends ConsumerStatefulWidget {
   static route() => MaterialPageRoute(

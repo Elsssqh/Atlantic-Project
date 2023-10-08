@@ -10,7 +10,6 @@ import 'package:atlanticc/features/user_profile/contoller/user_profile_controlle
 import 'package:atlanticc/features/user_profile/view/edit_profile_view.dart';
 import 'package:atlanticc/features/user_profile/widget/follow_count.dart';
 import 'package:atlanticc/models/user_model.dart';
-import 'package:atlanticc/theme/palette.dart';
 
 class UserProfile extends ConsumerWidget {
   final UserModel user;

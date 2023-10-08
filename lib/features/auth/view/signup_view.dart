@@ -7,7 +7,6 @@ import 'package:atlanticc/constants/constants.dart';
 import 'package:atlanticc/features/auth/controller/auth_controller.dart';
 import 'package:atlanticc/features/auth/view/login_view.dart';
 import 'package:atlanticc/features/auth/widgets/auth_field.dart';
-import 'package:atlanticc/theme/theme.dart';
 
 class SignUpView extends ConsumerStatefulWidget {
   static route() => MaterialPageRoute(
