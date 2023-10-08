@@ -142,7 +142,7 @@ class TweetController extends StateNotifier<bool> {
     required String repliedToUserId,
   }) {
     if (text.isEmpty) {
-      showSnackBar(context, 'Please enter text');
+      showSnackBar(context, 'Please enter text your text Blues!');
       return;
     }
 
@@ -206,7 +206,7 @@ class TweetController extends StateNotifier<bool> {
     res.fold((l) => showSnackBar(context, l.message), (r) {
       if (repliedToUserId.isNotEmpty) {
         _notificationController.createNotification(
-          text: '${user.name} replied to your tweet!',
+          text: '${user.name} replied to your Blues!',
           postId: r.$id,
           notificationType: NotificationType.reply,
           uid: repliedToUserId,
@@ -245,7 +245,7 @@ class TweetController extends StateNotifier<bool> {
     res.fold((l) => showSnackBar(context, l.message), (r) {
       if (repliedToUserId.isNotEmpty) {
         _notificationController.createNotification(
-          text: '${user.name} replied to your tweet!',
+          text: '${user.name} replied to your Blues!',
           postId: r.$id,
           notificationType: NotificationType.reply,
           uid: repliedToUserId,
